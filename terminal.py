@@ -1,4 +1,5 @@
 from zipfile import ZipFile
+from os import remove
 
 
 class MyTerminal:
@@ -27,6 +28,12 @@ class MyTerminal:
             self.ls()
         elif params[0] == 'cat':
             self.cat(params[1:])
+        elif params[0] == 'head':
+            self.head(params[1:])
+        elif params[0] == 'touch':
+            self.touch(params[1:])
+        else:
+            print("Команда не найдена")
 
     def cd(self, params):
         if len(params) == 0:
@@ -84,3 +91,48 @@ class MyTerminal:
                 print(read_file.read().decode('UTF-8'))
         except:
             print('Неправильное название файла')
+
+    def head(self, params):
+        file = params[-1]
+        if file.startswith('-'):
+            print('Не указано название файла')
+            return
+
+        try:
+            with self.fs.open(self.cur_d + file, 'r') as read_file:
+                data = read_file.read().decode('UTF-8').split('\n')
+        except:
+            print('Неправильное название файла')
+
+        flag = params[0]
+        n = 10
+        if flag.startswith('-'):
+            try:
+                n = int(flag[1:])
+            except:
+                n = 10
+                print('Флаг указан неверно, выведено 10 записей:\n')
+        print(*data[:n], sep='\n')
+
+    def touch(self, params):
+        file = params[-1]
+        if file.startswith('-'):
+            print('Не указано название файла')
+            return
+
+        file_temp = '__temp__' + file
+        try:
+            f = open(file_temp, 'w')
+            f.close()
+        except:
+            print('Не удалось создать файл')
+
+        try:
+            self.fs.write(file_temp, self.cur_d + file)
+        except:
+            print('Не удалось создать файл')
+
+        try:
+            remove(file_temp)
+        except:
+            pass
