@@ -11,7 +11,7 @@ class MyTerminal:
         self.polling = True
         while self.polling:
             message = f'user:~{self.cur_d}$ '
-            enter = input().strip()
+            enter = input(message).strip()
             if len(enter) > 0:
                 self.command_dispatcher(enter)
         print('stop polling...')
@@ -36,6 +36,8 @@ class MyTerminal:
             return
         directory = directory.split('/')
         new_directory = self.cur_d.split('/')
+        if new_directory == ['']:
+            new_directory = []
         for i in directory:
             if i == '..':
                 if len(new_directory) > 0:
@@ -48,8 +50,17 @@ class MyTerminal:
 
         new_path = '/'.join(new_directory) + '/'
         for file in self.fs.namelist():
-            if new_path.startswith(file):
+            if file.startswith(new_path):
                 self.cur_d = new_path
                 return
         print('Директория с таким названием отсутствует')
 
+    def ls(self):
+        files = set()
+        for file in self.fs.namelist():
+            if file.startswith(self.cur_d):
+                ls_name = file[len(self.cur_d):]
+                if '/' in ls_name:
+                    ls_name = ls_name[:ls_name.index('/')]
+                files.add(ls_name)
+        print(*sorted(files), sep='\n')
