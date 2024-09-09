@@ -20,26 +20,11 @@ def main():
 
     if exists(fs_path):
         with ZipFile(fs_path, 'a') as file_system:
-            print(file_system.namelist())
             terminal = MyTerminal(file_system)
             terminal.start_polling()
     else:
         print("Модель файловой системы с таким названием отсутствует")
         return
-
-
-def test_func():
-    with open('way.xml', 'rt') as f:
-        path = f.readline().strip()
-
-    with ZipFile(path, 'a') as my_zip:
-        print(my_zip.namelist())
-
-        with my_zip.open('desktop/shop list.txt', 'r') as f:
-            s = f.read()
-            s = s.decode('UTF-8')
-
-    print(s)
 
 
 if __name__ == '__main__':

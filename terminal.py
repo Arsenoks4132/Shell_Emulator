@@ -25,6 +25,8 @@ class MyTerminal:
             self.cd(params[1:])
         elif params[0] == 'ls':
             self.ls()
+        elif params[0] == 'cat':
+            self.cat(params[1:])
 
     def cd(self, params):
         if len(params) == 0:
@@ -71,3 +73,14 @@ class MyTerminal:
                     ls_name = ls_name[:ls_name.index('/')]
                 files.add(ls_name)
         print(*filter(lambda x: len(x) > 0, sorted(files)), sep='\n')
+
+    def cat(self, params):
+        file = params[-1]
+        if file.startswith('-'):
+            print('Не указана директория для перехода')
+            return
+        try:
+            with self.fs.open(self.cur_d + file, 'r') as read_file:
+                print(read_file.read().decode('UTF-8'))
+        except:
+            print('Неправильное название файла')
