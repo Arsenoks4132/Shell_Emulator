@@ -32,10 +32,13 @@ class MyTerminal:
             return
         directory = params[-1]
         if directory.startswith('-'):
-            print('Директория с таким названием отсутствует')
+            print('Не указана директория для перехода')
             return
+
+        directory = directory.strip('/')
         directory = directory.split('/')
-        new_directory = self.cur_d.split('/')
+
+        new_directory = self.cur_d[:-1].split('/')
         if new_directory == ['']:
             new_directory = []
         for i in directory:
@@ -43,12 +46,16 @@ class MyTerminal:
                 if len(new_directory) > 0:
                     new_directory.pop()
                 else:
-                    print('Директория с таким названием отсутствует')
+                    print('Некорректный путь до директории')
                     return
             else:
                 new_directory.append(i)
 
         new_path = '/'.join(new_directory) + '/'
+        if new_path == '/':
+            self.cur_d = ''
+            return
+
         for file in self.fs.namelist():
             if file.startswith(new_path):
                 self.cur_d = new_path
@@ -63,4 +70,4 @@ class MyTerminal:
                 if '/' in ls_name:
                     ls_name = ls_name[:ls_name.index('/')]
                 files.add(ls_name)
-        print(*sorted(files), sep='\n')
+        print(*filter(lambda x: len(x) > 0, sorted(files)), sep='\n')

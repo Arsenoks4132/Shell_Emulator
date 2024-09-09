@@ -1,27 +1,7 @@
-import sys
 from zipfile import ZipFile
 from sys import argv
 from os.path import exists
-
-
-class MyTerminal:
-    def __init__(self, file_system):
-        self.fs = file_system
-        self.cur_d = ''
-        self.polling = False
-
-    def start_polling(self):
-        self.polling = True
-        while self.polling:
-            enter = input(f'user:~{self.cur_d}$ ').strip()
-            if len(enter) > 0:
-                self.command_dispatcher(enter)
-        print('stop polling...')
-
-    def command_dispatcher(self, command):
-        params = command.split()
-        if params[0] == 'exit':
-            self.polling = False
+from terminal import MyTerminal
 
 
 def main():
@@ -40,6 +20,7 @@ def main():
 
     if exists(fs_path):
         with ZipFile(fs_path, 'a') as file_system:
+            print(file_system.namelist())
             terminal = MyTerminal(file_system)
             terminal.start_polling()
     else:
