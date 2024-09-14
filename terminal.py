@@ -70,7 +70,7 @@ class MyTerminal:
     def ls(self, params):
         work_directory = self.cur_d
         if len(params) > 0:
-            work_directory = self.cd((params[-1], ))
+            work_directory = self.cd((params[-1],))
             if work_directory is None:
                 return
 
