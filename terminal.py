@@ -23,9 +23,11 @@ class MyTerminal:
             self.polling = False
             return
         elif params[0] == 'cd':
-            self.cd(params[1:])
+            temp_dir = self.cd(params[1:])
+            if temp_dir is not None:
+                self.cur_d = temp_dir
         elif params[0] == 'ls':
-            self.ls()
+            self.ls(params[1:])
         elif params[0] == 'cat':
             self.cat(params[1:])
         elif params[0] == 'head':
@@ -37,12 +39,8 @@ class MyTerminal:
 
     def cd(self, params):
         if len(params) == 0:
-            self.cur_d = ''
-            return
+            return ''
         directory = params[-1]
-        if directory.startswith('-'):
-            print('Не указана директория для перехода')
-            return
 
         directory = directory.strip('/')
         directory = directory.split('/')
@@ -62,20 +60,24 @@ class MyTerminal:
 
         new_path = '/'.join(new_directory) + '/'
         if new_path == '/':
-            self.cur_d = ''
-            return
+            return ''
 
         for file in self.fs.namelist():
             if file.startswith(new_path):
-                self.cur_d = new_path
-                return
+                return new_path
         print('Директория с таким названием отсутствует')
 
-    def ls(self):
+    def ls(self, params):
+        work_directory = self.cur_d
+        if len(params) > 0:
+            work_directory = self.cd((params[-1], ))
+            if work_directory is None:
+                return
+
         files = set()
         for file in self.fs.namelist():
-            if file.startswith(self.cur_d):
-                ls_name = file[len(self.cur_d):]
+            if file.startswith(work_directory):
+                ls_name = file[len(work_directory):]
                 if '/' in ls_name:
                     ls_name = ls_name[:ls_name.index('/')]
                 files.add(ls_name)
@@ -83,9 +85,6 @@ class MyTerminal:
 
     def cat(self, params):
         file = params[-1]
-        if file.startswith('-'):
-            print('Не указана директория для перехода')
-            return
         try:
             with self.fs.open(self.cur_d + file, 'r') as read_file:
                 print(read_file.read().decode('UTF-8'))
@@ -94,9 +93,6 @@ class MyTerminal:
 
     def head(self, params):
         file = params[-1]
-        if file.startswith('-'):
-            print('Не указано название файла')
-            return
 
         try:
             with self.fs.open(self.cur_d + file, 'r') as read_file:
@@ -116,9 +112,6 @@ class MyTerminal:
 
     def touch(self, params):
         file = params[-1]
-        if file.startswith('-'):
-            print('Не указано название файла')
-            return
 
         file_temp = '__temp__' + file
         try:
@@ -126,11 +119,13 @@ class MyTerminal:
             f.close()
         except:
             print('Не удалось создать файл')
+            return
 
         try:
             self.fs.write(file_temp, self.cur_d + file)
         except:
             print('Не удалось создать файл')
+            return
 
         try:
             remove(file_temp)
