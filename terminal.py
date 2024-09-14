@@ -99,6 +99,7 @@ class MyTerminal:
                 data = read_file.read().decode('UTF-8').split('\n')
         except:
             print('Неправильное название файла')
+            return
 
         flag = params[0]
         n = 10
