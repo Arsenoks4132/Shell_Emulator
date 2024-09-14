@@ -60,10 +60,24 @@ touch [file]
 ## head
 
 ```bash
-head (-n <count>) [file]
+head (-<count>) [file]
 ```
 
 Вывод первых **count** строчек из **file**. При отсутствующем флаге **-n** выводится первые 10 строчек файла.
 
 ### Тесты:
 
+![image](https://github.com/user-attachments/assets/4a8bdf7a-c491-439f-a997-d8e4a43fbae1)
+
+
+## cat (concatenate)
+
+```bash
+cat [file]
+```
+
+Выводит содержимое файла [file].
+
+### Тесты
+
+![image](https://github.com/user-attachments/assets/469afae2-1afe-4eac-b2da-310a46e19eba)
