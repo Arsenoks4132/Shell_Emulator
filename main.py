@@ -1,6 +1,7 @@
 from zipfile import ZipFile
 from sys import argv
 from os.path import exists
+from window_mode import Window
 from terminal import MyTerminal
 
 
@@ -21,7 +22,12 @@ def main():
     if exists(fs_path):
         with ZipFile(fs_path, 'a') as file_system:
             terminal = MyTerminal(file_system)
-            terminal.start_polling()
+            if len(argv) > 2 and argv[2] == '-cli':
+                terminal.start_polling()
+            else:
+                window = Window(terminal)
+                window.start_polling()
+
     else:
         print("Модель файловой системы с таким названием отсутствует")
         return
