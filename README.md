@@ -17,7 +17,7 @@ py [path]/main.py [config] (-cli)
 ## ls (list)
 
 ```bash
-ls [directory]
+ls (directory)
 ```
 
 Просмотр содержимого директории **directory**. При отсутствующем параметре **directory** выводится содержимое текущей директории.
