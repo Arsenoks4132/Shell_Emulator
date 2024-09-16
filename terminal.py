@@ -1,5 +1,6 @@
 from zipfile import ZipFile
 from os import remove
+from window_mode import Window
 
 
 class MyTerminal:
@@ -7,6 +8,17 @@ class MyTerminal:
         self.fs = file_system
         self.cur_d = ''
         self.polling = False
+        self.window = None
+
+    def attach(self, window: Window):
+        self.window = window
+        self.window.write(f'user:~{self.cur_d}$ ')
+
+    def output(self, message, end='\n'):
+        if self.window is None:
+            print(message)
+        else:
+            self.window.write(message + end)
 
     def start_polling(self):
         self.polling = True
@@ -15,13 +27,19 @@ class MyTerminal:
             enter = input(message).strip()
             if len(enter) > 0:
                 self.command_dispatcher(enter)
-        print('stop polling...')
+        self.output('stop polling...')
 
     def command_dispatcher(self, command):
+        if self.window is not None:
+            self.output(command)
+
         params = command.split()
         if params[0] == 'exit':
-            self.polling = False
-            return
+            if self.window is None:
+                self.polling = False
+            else:
+                self.window.stop_polling()
+                return
         elif params[0] == 'cd':
             temp_dir = self.cd(params[1:])
             if temp_dir is not None:
@@ -35,7 +53,10 @@ class MyTerminal:
         elif params[0] == 'touch':
             self.touch(params[1:])
         else:
-            print("Команда не найдена")
+            self.output("Команда не найдена")
+
+        if self.window is not None:
+            self.output(f'user:~{self.cur_d}$ ', end='')
 
     def cd(self, params):
         if len(params) == 0:
@@ -53,7 +74,7 @@ class MyTerminal:
                 if len(new_directory) > 0:
                     new_directory.pop()
                 else:
-                    print('Некорректный путь до директории')
+                    self.output('Некорректный путь до директории')
                     return
             else:
                 new_directory.append(i)
@@ -65,12 +86,12 @@ class MyTerminal:
         for file in self.fs.namelist():
             if file.startswith(new_path):
                 return new_path
-        print('Директория с таким названием отсутствует')
+        self.output('Директория с таким названием отсутствует')
 
     def ls(self, params):
         work_directory = self.cur_d
         if len(params) > 0:
-            work_directory = self.cd((params[-1], ))
+            work_directory = self.cd((params[-1],))
             if work_directory is None:
                 return
 
@@ -81,15 +102,15 @@ class MyTerminal:
                 if '/' in ls_name:
                     ls_name = ls_name[:ls_name.index('/')]
                 files.add(ls_name)
-        print(*filter(lambda x: len(x) > 0, sorted(files)), sep='\n')
+        self.output('\n'.join(filter(lambda x: len(x) > 0, sorted(files))))
 
     def cat(self, params):
         file = params[-1]
         try:
             with self.fs.open(self.cur_d + file, 'r') as read_file:
-                print(read_file.read().decode('UTF-8'))
+                self.output(read_file.read().decode('UTF-8'))
         except:
-            print('Неправильное название файла')
+            self.output('Неправильное название файла')
 
     def head(self, params):
         file = params[-1]
@@ -98,7 +119,7 @@ class MyTerminal:
             with self.fs.open(self.cur_d + file, 'r') as read_file:
                 data = read_file.read().decode('UTF-8').split('\n')
         except:
-            print('Неправильное название файла')
+            self.output('Неправильное название файла')
             return
 
         flag = params[0]
@@ -108,8 +129,8 @@ class MyTerminal:
                 n = int(flag[1:])
             except:
                 n = 10
-                print('Флаг указан неверно, выведено 10 записей:\n')
-        print(*data[:n], sep='\n')
+                self.output('Флаг указан неверно, выведено 10 записей:\n')
+        self.output('\n'.join(data[:n]))
 
     def touch(self, params):
         file = params[-1]
@@ -119,13 +140,13 @@ class MyTerminal:
             f = open(file_temp, 'w')
             f.close()
         except:
-            print('Не удалось создать файл')
+            self.output('Не удалось создать файл')
             return
 
         try:
             self.fs.write(file_temp, self.cur_d + file)
         except:
-            print('Не удалось создать файл')
+            self.output('Не удалось создать файл')
             return
 
         try:
