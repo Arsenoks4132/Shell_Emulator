@@ -1,5 +1,6 @@
 from zipfile import ZipFile
 from os import remove
+import window_mode
 
 
 class MyTerminal:
