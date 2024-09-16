@@ -1,5 +1,6 @@
 from tkinter import Tk, Entry, Button, Text
 import tkinter as tk
+from sys import exit
 
 
 class Window:
@@ -25,7 +26,6 @@ class Window:
         self.butn.pack()
 
         self.terminal.attach(self)
-        self.window.mainloop()
 
     def write(self, message):
         self.console.configure(state=tk.NORMAL)
@@ -36,3 +36,10 @@ class Window:
         command = self.enter.get()
         self.terminal.command_dispatcher(command)
         self.enter.delete(0, tk.END)
+
+    def start_polling(self):
+        self.window.mainloop()
+
+    def stop_polling(self):
+        self.window.destroy()
+        exit()

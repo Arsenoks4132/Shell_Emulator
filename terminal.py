@@ -35,8 +35,11 @@ class MyTerminal:
 
         params = command.split()
         if params[0] == 'exit':
-            self.polling = False
-            return
+            if self.window is None:
+                self.polling = False
+            else:
+                self.window.stop_polling()
+                return
         elif params[0] == 'cd':
             temp_dir = self.cd(params[1:])
             if temp_dir is not None:

@@ -4,6 +4,7 @@ from os.path import exists
 from window_mode import Window
 from terminal import MyTerminal
 
+
 def main():
     if len(argv) > 1:
         config_file = argv[1]
@@ -25,6 +26,7 @@ def main():
                 terminal.start_polling()
             else:
                 window = Window(terminal)
+                window.start_polling()
 
     else:
         print("Модель файловой системы с таким названием отсутствует")
