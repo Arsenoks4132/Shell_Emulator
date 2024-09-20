@@ -31,11 +31,13 @@ class Window:
         self.console.configure(state=tk.NORMAL)
         self.console.insert(tk.END, message)
         self.console.configure(state=tk.DISABLED)
+        self.console.see("end")
 
     def read_command(self, event):
         command = self.enter.get()
-        self.terminal.command_dispatcher(command)
-        self.enter.delete(0, tk.END)
+        if len(command) > 0:
+            self.terminal.command_dispatcher(command)
+            self.enter.delete(0, tk.END)
 
     def start_polling(self):
         self.window.mainloop()
