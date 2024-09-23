@@ -45,11 +45,11 @@ class MyTerminal:
             if temp_dir is not None:
                 self.cur_d = temp_dir
         elif params[0] == 'ls':
-            self.ls(params[1:])
+            self.output(self.ls(params[1:]))
         elif params[0] == 'cat':
-            self.cat(params[1:])
+            self.output(self.cat(params[1:]))
         elif params[0] == 'head':
-            self.head(params[1:])
+            self.output(self.head(params[1:]))
         elif params[0] == 'touch':
             self.touch(params[1:])
         else:
@@ -93,7 +93,7 @@ class MyTerminal:
         if len(params) > 0:
             work_directory = self.cd((params[-1],))
             if work_directory is None:
-                return
+                return ''
 
         files = set()
         for file in self.fs.namelist():
@@ -102,15 +102,15 @@ class MyTerminal:
                 if '/' in ls_name:
                     ls_name = ls_name[:ls_name.index('/')]
                 files.add(ls_name)
-        self.output('\n'.join(filter(lambda x: len(x) > 0, sorted(files))))
+        return '\n'.join(filter(lambda x: len(x) > 0, sorted(files)))
 
     def cat(self, params):
         file = params[-1]
         try:
             with self.fs.open(self.cur_d + file, 'r') as read_file:
-                self.output(read_file.read().decode('UTF-8'))
+                return read_file.read().decode('UTF-8')
         except:
-            self.output('Неправильное название файла')
+            return 'Неправильное название файла'
 
     def head(self, params):
         file = params[-1]
@@ -119,8 +119,7 @@ class MyTerminal:
             with self.fs.open(self.cur_d + file, 'r') as read_file:
                 data = read_file.read().decode('UTF-8').split('\n')
         except:
-            self.output('Неправильное название файла')
-            return
+            return 'Неправильное название файла'
 
         flag = params[0]
         n = 10
@@ -129,8 +128,8 @@ class MyTerminal:
                 n = int(flag[1:])
             except:
                 n = 10
-                self.output('Флаг указан неверно, выведено 10 записей:\n')
-        self.output('\n'.join(data[:n]))
+                return 'Флаг указан неверно, выведено 10 записей:\n'
+        return '\n'.join(data[:n])
 
     def touch(self, params):
         file = params[-1]
