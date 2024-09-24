@@ -22,7 +22,7 @@ ls (directory)
 
 Просмотр содержимого директории **directory**. При отсутствующем параметре **directory** выводится содержимое текущей директории.
 
-### Тесты:
+### Примеры работы:
 
 ![image](https://github.com/user-attachments/assets/592e57f8-30af-4dc8-8f1a-47f5eff6e03a)
 
@@ -34,7 +34,7 @@ cd [directory]
 
 Изменение текущей директории на **directory**. При отсутствующем параметре **directory** директория изменяется на корневую.
 
-### Тесты:
+### Примеры работы:
 
 ![image](https://github.com/user-attachments/assets/003e0991-588d-4efb-90eb-7480dd4efe6a)
 
@@ -42,7 +42,7 @@ cd [directory]
 
 Выход из эмулятора.
 
-### Тесты:
+### Примеры работы:
 
 ![image](https://github.com/user-attachments/assets/528b7193-9842-460f-b341-93ee711b9902)
 
@@ -54,7 +54,7 @@ touch [file]
 
 Создание файла с названием **file**.
 
-### Тесты:
+### Примеры работы:
 
 ![image](https://github.com/user-attachments/assets/4d81129c-45c4-429d-94e7-2dec91567a62)
 
@@ -66,7 +66,7 @@ head (-<count>) [file]
 
 Вывод первых **count** строчек из **file**. При отсутствующем флаге **-n** выводится первые 10 строчек файла.
 
-### Тесты:
+### Примеры работы:
 
 ![image](https://github.com/user-attachments/assets/4a8bdf7a-c491-439f-a997-d8e4a43fbae1)
 
@@ -79,6 +79,17 @@ cat [file]
 
 Выводит содержимое файла [file].
 
-### Тесты
+### Примеры работы
 
 ![image](https://github.com/user-attachments/assets/469afae2-1afe-4eac-b2da-310a46e19eba)
+
+# Тесты
+
+Для всех методов были написаны тесты, в результате удалось добиться покрытия в 79%.
+
+### Прохождение тестов:
+
+
+
+### Процент покрытия:
+
