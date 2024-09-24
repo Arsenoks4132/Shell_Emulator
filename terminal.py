@@ -102,13 +102,13 @@ class MyTerminal:
                 if '/' in ls_name:
                     ls_name = ls_name[:ls_name.index('/')]
                 files.add(ls_name)
-        return '\n'.join(filter(lambda x: len(x) > 0, sorted(files)))
+        return '\n'.join(sorted(filter(lambda x: len(x) > 0, files)))
 
     def cat(self, params):
         file = params[-1]
         try:
             with self.fs.open(self.cur_d + file, 'r') as read_file:
-                return read_file.read().decode('UTF-8')
+                return read_file.read().decode('UTF-8').replace('\r', '')
         except:
             return 'Неправильное название файла'
 
@@ -129,10 +129,14 @@ class MyTerminal:
             except:
                 n = 10
                 return 'Флаг указан неверно, выведено 10 записей:\n'
-        return '\n'.join(data[:n])
+        return '\n'.join(data[:n]).replace('\r', '')
 
     def touch(self, params):
-        file = params[-1]
+        if len(params) > 0:
+            file = params[-1]
+        else:
+            self.output('Не указано имя файла')
+            return
 
         file_temp = '__temp__' + file
         try:
