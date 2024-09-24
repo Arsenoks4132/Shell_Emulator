@@ -89,7 +89,9 @@ cat [file]
 
 ### Прохождение тестов:
 
+![pycharm64_oWhtEJ9Byy](https://github.com/user-attachments/assets/ee089558-c29e-406a-af16-002c26d60f7e)
 
 
 ### Процент покрытия:
 
+![pycharm64_RTGIO3VjVe](https://github.com/user-attachments/assets/740961ef-bf06-4cf2-aff7-bd9757cca26c)
