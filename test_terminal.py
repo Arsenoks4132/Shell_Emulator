@@ -37,7 +37,11 @@ def test_attach_2(terminal):
     assert terminal.window is not None
 
 
-def test_start_polling_1(terminal):
+def test_start_polling_1(terminal, monkeypatch):
+    inp = ['ls']
+    def my_input():
+        return inp.pop()
+    monkeypatch.setattr('builtin.input', my_input)
     terminal.start_polling()
     assert terminal.polling
 
