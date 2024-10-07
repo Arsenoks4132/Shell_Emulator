@@ -14,7 +14,13 @@ python -m venv venv
 venv/Scripts/activate
 ```
 
-# 3. Запуск программы
+# 3. Установка зависимостей
+
+```shell
+pip install -r requirements.txt
+```
+
+# 4. Запуск программы
 
 Запуск в режиме **GUI**:
 
@@ -28,7 +34,7 @@ py main.py "path.xml"
 py main.py "path.xml" -cli
 ```
 
-# 4. Тестирование
+# 5. Тестирование
 
 Для запуска тестирования необходимо запустить следующий скрипт:
 
